@@ -63,7 +63,7 @@ matricule = Label(root, text="Matricule :")
 prenom = Label(root, text="Prénom :")
 nom = Label(root, text="nom :")
 email = Label(root, text="email :")
-tel = Label(root, text="tel :"),
+tel = Label(root, text="tel :")
 
 e_matricule = Entry(root, width=35)
 e_prenom = Entry(root, width=35)
