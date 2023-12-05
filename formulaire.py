@@ -4,18 +4,39 @@ import sqlite3
 #création fenêtre 
 root = Tk()
 root.title('Formulaire')
-root.geometry("450x450")
+root.geometry("650x550")
 
 #gestion BD
 conn = sqlite3.connect('formulaire.db')
 c = conn.cursor()
-# c.execute('''CREATE TABLE user (
-#           matricule text,
-#           prenom text,
-#           nom text,
-#           email text,
-#           tel integer
-# )''')
+c.execute('''CREATE TABLE IF NOT EXISTS user (
+          matricule INTEGER PRIMARY KEY AUTOINCREMENT,
+          prenom TEXT NOT NULL,
+          nom TEXT NOT NULL,
+          email TEXT NOT NULL,
+          tel INTEGER
+)''')
+
+c.execute('''
+    CREATE TABLE IF NOT EXISTS pays (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom TEXT NOT NULL
+    )
+''')
+
+c.execute('''
+    CREATE TABLE IF NOT EXISTS trajet (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom_passager TEXT NOT NULL,
+        date_depart DATE NOT NULL,
+        destination_id INTEGER,
+        utilisateur_id INTEGER,
+        FOREIGN KEY (destination_id) REFERENCES pays (id),
+        FOREIGN KEY (utilisateur_id) REFERENCES user (id)
+    )
+''')
+
+
 
 def submit():
     conn = sqlite3.connect('formulaire.db')
@@ -26,7 +47,7 @@ def submit():
         'prenom':e_prenom.get(),
         'nom':e_nom.get(),
         'email':e_email.get(),
-        'tel':e_tel.get()              
+        'tel':e_tel.get()
     }
     )
     conn.commit()
