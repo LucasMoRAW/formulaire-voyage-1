@@ -4,17 +4,17 @@ import sqlite3
 #création fenêtre 
 root = Tk()
 root.title('Formulaire')
-root.geometry("650x550")
+root.geometry("450x450")
 
 #gestion BD
-conn = sqlite3.connect('formulaire.db')
+conn = sqlite3.connect('formulaire.sqlite3')
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS user (
           matricule INTEGER PRIMARY KEY AUTOINCREMENT,
           prenom TEXT NOT NULL,
           nom TEXT NOT NULL,
           email TEXT NOT NULL,
-          tel INTEGER
+          tel INTEGER NOT NULL
 )''')
 
 c.execute('''
@@ -36,10 +36,8 @@ c.execute('''
     )
 ''')
 
-
-
 def submit():
-    conn = sqlite3.connect('formulaire.db')
+    conn = sqlite3.connect('formulaire.sqlite3')
     c = conn.cursor()
     c.execute("INSERT INTO user VALUES (:matricule, :prenom, :nom, :email, :tel)",
     {
@@ -61,10 +59,10 @@ def submit():
     e_tel.delete(0, END)
 
 def afficher():
-    conn = sqlite3.connect('formulaire.db')
+    conn = sqlite3.connect('formulaire.sqlite3')
     c = conn.cursor()
 
-    c.execute("SELECT *, oid from user ")
+    c.execute("SELECT * from user ;")
     records = c.fetchall()
 
     p_records = ""
@@ -111,7 +109,7 @@ e_tel.grid(row=4, column=1,padx=15)
 save = Button(root, text="Enregistrer", width=30, command=submit)
 save.grid(row=5, column=1, columnspan=2)
 
-show_records = Button(root, text="Voir les enregistrements", width=30)
+show_records = Button(root, text="Voir les enregistrements", width=30, command=afficher)
 show_records.grid(row=6, column=1, columnspan=2, pady=15)
 
 conn.commit()
